@@ -314,7 +314,7 @@ def build_dataset(value_df, macro):
     #dataset = dataset.sort_values('Date')
     dataset = dataset.dropna(subset=['future_return'])
     dataset['target'] = (dataset['future_return'] > 0.03).astype(int)
-    st.write("상승 비율:", dataset['target'].mean())
+    #st.write("상승 비율:", dataset['target'].mean())
     return dataset
 
 def train_ensemble_models(dataset):
