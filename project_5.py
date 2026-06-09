@@ -236,8 +236,10 @@ def create_features(df, macro, ticker_name):
     
     df['return_1d'] = c.pct_change().fillna(0)
     df['return_5d'] = c.pct_change(5).fillna(0)
-    df['ma5'] = c.rolling(5).mean().fillna(method='bfill')
-    df['ma20'] = c.rolling(20).mean().fillna(method='bfill')
+    df['ma5'] = c.rolling(5).mean().bfill()
+    df['ma20'] = c.rolling(20).mean().bfill()
+    #df['ma5'] = c.rolling(5).mean().fillna(method='bfill')
+    #df['ma20'] = c.rolling(20).mean().fillna(method='bfill')
     df['ma_gap'] = (c / (df['ma20'] + 1e-6)).fillna(1.0)
     
     df['volume_ratio'] = (v / (v.rolling(20).mean() + 1e-6)).fillna(1.0)
