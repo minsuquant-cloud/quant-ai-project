@@ -535,6 +535,10 @@ def render_live_signals():
         live_df['kelly_bet'] = pd.to_numeric(live_df['kelly_bet'])
         
         live_df['recent_3_avg_amt_ek'] = live_df['recent_3_avg_amt'] / 100_000_000
+        live_df['rank_score'] = (
+            live_df['prob_up'] * 100 * 0.7
+            + live_df['value_score'] * 0.3
+        )
         top_value_df = live_df.sort_values(by='value_score', ascending=False).head(TOP_N)
         
         st.markdown("### 💎 실시간 포착 가치-수급 대장주 요약")
@@ -644,7 +648,7 @@ def render_live_signals():
         st.subheader(f"📋 실시간 우량 가치주 TOP {TOP_N} 모니터링 보드")
         
         st.dataframe(
-            top_value_df[['Name', 'Sector', 'daily_trend_bull', 'PER', 'PBR', 'ROE', 'prob_up', 'rsi', 'recent_3_avg_amt_ek', 'kelly_bet', 'signal']]
+            top_value_df[['Name', 'rank_score', 'Sector', 'daily_trend_bull', 'PER', 'PBR', 'ROE', 'prob_up', 'rsi', 'recent_3_avg_amt_ek', 'kelly_bet', 'signal']]
             .style.map(lambda x: 'background-color: #ffcccc; color: #cc0000; font-weight: bold;' if '매수' in str(x) else ('background-color: #ccffcc; color: #006600; font-weight: bold;' if '매도' in str(x) else ''), subset=['signal'])
             .format({'prob_up': '{:.2%}', 'rsi': '{:.1f}', 'PER': '{:.1f}', 'PBR': '{:.2f}', 'ROE': '{:.2f}%', 'recent_3_avg_amt_ek': '{:.1f} 억', 'kelly_bet': '{:.1f}%'}),
             use_container_width=True, height=350
